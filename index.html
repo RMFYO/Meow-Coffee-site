@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meow Coffee - Café com Gatinhos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* --- Cores Roxas --- */
+        :root {
+            --roxo-escuro: #6a3093;
+            --roxo-medio: #8a4db8;
+            --roxo-pastel-claro: #d1b3e6;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0e6ff, #e6d4f0);
+            color:#333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(209, 179, 230, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 2px 20px rgba(179, 153, 212, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #b399d4, #d1b3e6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            color: var(--roxo-escuro);
+            background: none;
+            -webkit-text-fill-color: initial;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--roxo-escuro); 
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+
+        nav a:hover, nav a.active {
+           background: linear-gradient(45deg, var(--roxo-medio), var(--roxo-pastel-claro));
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Search */
+        .search-container {
+            position: relative;
+        }
+
+        .search-box {
+              background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--roxo-medio);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: var(--roxo-escuro);
+            width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #8b458b;
+            background: rgba(255, 255, 255, 0.15);
+            width: 250px;
+        }
+
+        .search-box::placeholder {
+         color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 100px;
+            min-height: calc(100vh - 100px);
+        }
+
+        .section {
+            padding: 60px 0;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--roxo-escuro); /* Título em roxo escuro */
+            background: none;
+            -webkit-text-fill-color: initial;
+        }
+
+        /* Home Section */
+        .hero {
+            text-align: center;
+            padding: 100px 0;
+            background: radial-gradient(circle at center, rgba(139, 69, 139, 0.2), transparent);
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #444;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #5a1d8a, #7b3db3);
+            color: #ffffff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+          background: linear-gradient(45deg, #7b3db3, #9c64c6) !important;
+            box-shadow: 0 5px 15px rgba(90, 29, 138, 0.4) !important;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .about-features {
+            display: grid;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(139, 69, 139, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(139, 69, 139, 0.2);
+        }
+
+        /* Cats Grid */
+        .cats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .cat-card {
+            background: rgba(209, 179, 230, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid rgba(179, 153, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cat-card:hover {
+            transform: translateY(-5px);
+            border-color: #d1b3e6;
+            box-shadow: 0 15px 40px rgba(179, 153, 212, 0.3);
+        }
+
+        .cat-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid rgba(139, 69, 139, 0.3);
+        }
+
+        .cat-photo-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 15px;
+            margin: 0 auto 15px;
+            border: 3px solid rgba(139, 69, 139, 0.3);
+            background: linear-gradient(135deg, rgba(139, 69, 139, 0.2), rgba(217, 70, 239, 0.1));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .cat-photo-placeholder:hover {
+            border-color: #d946ef;
+            transform: scale(1.05);
+        }
+
+        .cat-emoji {
+            font-size: 80px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 8px rgba(139, 69, 139, 0.3));
+        }
+
+        .photo-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #d946ef;
+            background: rgba(139, 69, 139, 0.2);
+            padding: 4px 8px;
+            border-radius: 8px;
+            text-transform: uppercase;
+        }
+
+        .cat-name {
+           font-size: 20px;
+            font-weight: 600;
+            color: var(--roxo-escuro); /* Nome dos gatos em roxo escuro */
+            margin-bottom: 10px;
+        }
+
+        /* Menu Section */
+        .menu-category {
+            margin-bottom: 50px;
+        }
+
+        .menu-category h3 {
+            font-size: 28px;
+            color: #5a1d8a;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-item {
+            background: rgba(209, 179, 230, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(179, 153, 212, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-item-info h4 {
+            color: var(--roxo-escuro); /* Itens do cardápio em roxo escuro */
+            margin-bottom: 5px;
+        }
+
+        .menu-item-info p {
+            .menu-item-info p {
+    color: var(--roxo-medio);
+}
+
+        .menu-price {
+           font-size: 18px;
+            font-weight: 600;
+            color:var(--roxo-escuro):
+        }
+
+        /* Search Results */
+        .search-results {
+            margin-top: 20px;
+        }
+
+        .search-results.hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .search-box {
+                width: 150px;
+            }
+
+            .search-box:focus {
+                width: 180px;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h2 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="fotos/logo.png" alt="Logo Meow Coffee" class="logo-img">
+    <h1>MEOW COFFEE</h1>
+</div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="nav-link active">Home</a></li>
+                        <li><a href="#about" class="nav-link">Quem Somos</a></li>
+                        <li><a href="#cats" class="nav-link">Nossos Gatinhos</a></li>
+                        <li><a href="#menu" class="nav-link">Cardápio</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="search-container">
+                    <input type="text" class="search-box" placeholder="Buscar..." id="searchInput">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="hero">
+                    <h2>Bem-vindos ao Meow Coffee</h2>
+                    <p>O primeiro cat café do Brasil, onde você pode saborear um delicioso café na companhia dos nossos adoráveis felinos!</p>
+                    <a href="#cats" class="cta-button nav-link">Conheça Nossos Gatinhos</a>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="section">
+                <h2>Quem Somos</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>O Meow Coffee nasceu do amor pelos felinos e pela boa gastronomia. Somos o primeiro cat café do Brasil, um espaço único onde você pode relaxar, tomar um café especial e interagir com nossos gatinhos resgatados que estão procurando um lar.</p>
+                        
+                        <p>Nossa missão é proporcionar momentos de alegria e conexão entre pessoas e felinos, além de ajudar na adoção responsável de nossos amigos peludos. Todo o lucro é revertido para o cuidado dos animais e parcerias com ONGs locais.</p>
+                    </div>
+                    
+                    <div class="about-features">
+                        <div class="feature-card">
+                            <h3>🐱 Adoção Responsável</h3>
+                            <p>Todos os nossos gatinhos estão disponíveis para adoção</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>☕ Café Premium</h3>
+                            <p>Grãos selecionados e métodos especiais de preparo</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>🏠 Ambiente Acolhedor</h3>
+                            <p>Espaço pensado para o bem-estar dos felinos e visitantes</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cats Section -->
+            <section id="cats" class="section">
+                <h2>Nossos Gatinhos</h2>
+                <div class="cats-grid">
+                    <div class="cat-card">
+                        <img src="fotos/chuvisco.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">CHUVISCO</div>
+                        <p>Gatinho brincalhão e carinhoso, adora receber carinho</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/mingau.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">MINGAU</div>
+                        <p>Gatinha tranquila e elegante, perfeita para quem busca sossego</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/gorgonzola.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">GORGONZOLA</div>
+                        <p>Gatinho aventureiro e curioso, sempre explorando novos cantinhos</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/pirata.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">PIRATA</div>
+                        <p>Gatinha independente com personalidade forte e muito carismática</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/daemon.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">DAEMON</div>
+                        <p>Gatinho jovem e energético, adora brincar e fazer novos amigos</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/sheldon.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">SHELDON</div>
+                        <p>Gatinho inteligente e observador, sempre de olho em tudo que acontece</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/cleo.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">CLEO</div>
+                        <p>Gatinha especial e única, com personalidade marcante</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/cupido.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">CUPIDO</div>
+                        <p>Gatinho amoroso que conquista todos os corações</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/hermione.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">HERMIONE</div>
+                        <p>Gatinha inteligente e graciosa, sempre elegante</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/oreo.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">OREO</div>
+                        <p>Gatinho preto e branco, doce como um biscoito</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/ra.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">RA</div>
+                        <p>Gatinho majestoso com porte de faraó</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/napolitana.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">NAPOLITANA</div>
+                        <p>Gatinha tricolor cheia de personalidade</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/puro osso.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">PURO OSSO</div>
+                        <p>Gatinho elegante com características siamesas</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/black.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">BLACK</div>
+                        <p>Gatinho azul russo, calmo e observador</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/james.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">JAMES E JESSE</div>
+                        <p>Dupla inseparável de gatinhos brincalhões</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/salem.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">SALEM</div>
+                        <p>Gatinho preto misterioso e carinhoso</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/frajola.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">FRAJOLA</div>
+                        <p>Gatinho travesso cheio de energia</p>
+                    </div>
+                    
+                    <div class="cat-card">
+                         <img src="fotos/piu piu.jpeg" alt="Foto do gato Chuvisco" class="cat-photo">
+                        <div class="cat-name">PIUPIU</div>
+                        <p>Gatinho pequeno e adorável, sempre curioso</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Menu Section -->
+            <section id="menu" class="section">
+                <h2>Cardápio</h2>
+                
+                <div class="menu-category">
+                    <h3>☕ Cafés Especiais</h3>
+                    <div class="menu-items">
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Espresso Gatinho</h4>
+                                <p>Espresso tradicional com toque especial da casa</p>
+                            </div>
+                            <div class="menu-price">R$ 8,50</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Cappuccino Peludo</h4>
+                                <p>Cappuccino cremoso com arte latte felina</p>
+                            </div>
+                            <div class="menu-price">R$ 12,00</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Latte Miau</h4>
+                                <p>Café com leite vaporizado e desenho de gatinho</p>
+                            </div>
+                            <div class="menu-price">R$ 10,50</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Mocha Felino</h4>
+                                <p>Café com chocolate e chantilly, decorado com patinha</p>
+                            </div>
+                            <div class="menu-price">R$ 14,00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-category">
+                    <h3>🥐 Doces e Salgados</h3>
+                    <div class="menu-items">
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Croissant Bigode</h4>
+                                <p>Croissant artesanal com recheio de presunto e queijo</p>
+                            </div>
+                            <div class="menu-price">R$ 9,50</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Cupcake Patinha</h4>
+                                <p>Cupcake de baunilha com cobertura de cream cheese</p>
+                            </div>
+                            <div class="menu-price">R$ 7,00</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Sanduíche Ronron</h4>
+                                <p>Pão artesanal com peito de peru, queijo brie e rúcula</p>
+                            </div>
+                            <div class="menu-price">R$ 16,50</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Brownie Fofinho</h4>
+                                <p>Brownie de chocolate com nozes e sorvete de baunilha</p>
+                            </div>
+                            <div class="menu-price">R$ 11,00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-category">
+                    <h3>🧃 Bebidas Geladas</h3>
+                    <div class="menu-items">
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Frappé Siamês</h4>
+                                <p>Café gelado batido com leite condensado e chantilly</p>
+                            </div>
+                            <div class="menu-price">R$ 13,50</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Smoothie Persa</h4>
+                                <p>Smoothie de frutas vermelhas com iogurte natural</p>
+                            </div>
+                            <div class="menu-price">R$ 11,50</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-info">
+                                <h4>Limonada Malandra</h4>
+                                <p>Limonada suíça com hortelã fresca</p>
+                            </div>
+                            <div class="menu-price">R$ 8,00</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Results -->
+            <div id="searchResults" class="search-results hidden">
+                <h2>Resultados da Busca</h2>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        const searchResults = document.getElementById('searchResults');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links and sections
+                navLinks.forEach(l => l.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+                
+                // Hide search results
+                searchResults.classList.add('hidden');
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                // Show corresponding section
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const resultsContent = document.getElementById('resultsContent');
+
+        // Search data
+        const searchData = [
+            { type: 'cat', name: 'Chuvisco', description: 'Gatinho brincalhão e carinhoso' },
+            { type: 'cat', name: 'Mingau', description: 'Gatinha tranquila e elegante' },
+            { type: 'cat', name: 'Gorgonzola', description: 'Gatinho aventureiro e curioso' },
+            { type: 'cat', name: 'Pirata', description: 'Gatinha independente com personalidade forte' },
+            { type: 'cat', name: 'Daemon', description: 'Gatinho jovem e energético' },
+            { type: 'cat', name: 'Sheldon', description: 'Gatinho inteligente e observador' },
+            { type: 'menu', name: 'Espresso Gatinho', description: 'Espresso tradicional', price: 'R$ 8,50' },
+            { type: 'menu', name: 'Cappuccino Peludo', description: 'Cappuccino cremoso com arte latte', price: 'R$ 12,00' },
+            { type: 'menu', name: 'Latte Miau', description: 'Café com leite vaporizado', price: 'R$ 10,50' },
+            { type: 'menu', name: 'Mocha Felino', description: 'Café com chocolate e chantilly', price: 'R$ 14,00' },
+            { type: 'menu', name: 'Croissant Bigode', description: 'Croissant com presunto e queijo', price: 'R$ 9,50' },
+            { type: 'menu', name: 'Cupcake Patinha', description: 'Cupcake de baunilha', price: 'R$ 7,00' }
+        ];
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (query.length === 0) {
+                searchResults.classList.add('hidden');
+                return;
+            }
+
+            const results = searchData.filter(item => 
+                item.name.toLowerCase().includes(query) || 
+                item.description.toLowerCase().includes(query)
+            );
+
+            displaySearchResults(results, query);
+        });
+
+        function displaySearchResults(results, query) {
+            if (results.length === 0) {
+                resultsContent.innerHTML = '<p>Nenhum resultado encontrado para "' + query + '"</p>';
+            } else {
+                let html = '';
+                results.forEach(result => {
+                    if (result.type === 'cat') {
+                        html += `
+                            <div class="cat-card">
+                                <div class="cat-photo-placeholder">
+                                    <span class="cat-emoji">🐱</span>
+                                    <div class="photo-label">${result.name}</div>
+                                </div>
+                                <div class="cat-name">${result.name}</div>
+                                <p>${result.description}</p>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="menu-item">
+                                <div class="menu-item-info">
+                                    <h4>${result.name}</h4>
+                                    <p>${result.description}</p>
+                                </div>
+                                <div class="menu-price">${result.price}</div>
+                            </div>
+                        `;
+                    }
+                });
+                resultsContent.innerHTML = html;
+            }
+
+            // Hide all sections and show search results
+            sections.forEach(s => s.classList.remove('active'));
+            navLinks.forEach(l => l.classList.remove('active'));
+            searchResults.classList.remove('hidden');
+        }
+
+        // Clear search when clicking navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                searchInput.value = '';
+            });
+        });
+    </script>
+</body>
+</html>
